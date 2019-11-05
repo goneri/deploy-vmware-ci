@@ -1,0 +1,28 @@
+- hosts: localhost
+  tasks:
+    - os_server:
+        name: '{{ item }}'
+        state: absent
+      with_items:
+        - esxi1
+        - esxi2
+        - datastore
+        - vcenter
+    - os_port:
+        name: '{{ item }}'
+        state: absent
+      with_items:
+        - port_public_datastore
+        - port_lab_datastore
+        - port_lab_esxi1
+        - port_lab_esxi2
+        - port_lab_vcsa
+    - os_router:
+        state: absent
+        name: router_lab
+    - os_subnet:
+        state: absent
+        name: testlabsubnet
+    - os_network:
+        state: absent
+        name: testlab

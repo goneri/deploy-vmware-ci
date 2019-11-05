@@ -1,0 +1,9 @@
+- hosts: localhost
+  tasks:
+    - os_server:
+        name: '{{ item }}'
+        state: absent
+      with_items:
+        - esxi1
+        - esxi2
+        - vcenter

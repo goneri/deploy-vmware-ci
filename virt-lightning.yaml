@@ -1,0 +1,42 @@
+- name: datastore
+  distro: centos-7
+  memory: 1024
+  vcpus: 1
+  root_password: '!234AaAa56'
+  groups: ['datastore']
+  networks:
+  - network: virt-lightning
+    ipv4: 192.168.123.4
+  - network: default
+- name: esxi1
+  distro: esxi-6.7.0-20190802001-STANDARD
+  memory: 4096
+  vcpus: 1
+  root_password: '!234AaAa56'
+  groups: ['all_esxi', 'esxi_lab']
+  networks:
+  - network: virt-lightning
+    nic_model: e1000
+    ipv4: 192.168.123.6
+  - network: default
+    nic_model: e1000
+- name: esxi2
+  distro: esxi-6.7.0-20190802001-STANDARD
+  memory: 4096
+  vcpus: 1
+  root_password: '!234AaAa56'
+  groups: ['all_esxi', 'esxi_lab']
+  networks:
+  - network: virt-lightning
+    nic_model: e1000
+    ipv4: 192.168.123.7
+  - network: default
+    nic_model: e1000
+- name: vcenter
+  distro: vCenterServerAppliance
+  memory: 8000
+  vcpus: 2
+  root_password: '!234AaAa56'
+  networks:
+  - network: virt-lightning
+    ipv4: 192.168.123.8

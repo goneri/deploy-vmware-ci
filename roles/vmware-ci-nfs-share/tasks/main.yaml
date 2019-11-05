@@ -1,0 +1,25 @@
+- name: Prepare the NFS shares
+  file:
+      path: '{{ item }}'
+      state: directory
+      owner: '{{ vmware_ci_nfs_share_owner_uid }}'
+      group: '{{ vmware_ci_nfs_share_owner_gid }}'
+  with_items:
+      - /srv/share/vms
+      - /srv/share/isos
+  become: True
+- name: Copy the ISO images
+  copy:
+    src: 'cache/{{ item.name }}'
+    dest: '/srv/share/isos/{{ item.name }}'
+    mode: '0644'
+  with_items:
+      - name: fedora.iso
+      - name: centos.iso
+- name: Prepare the /etc/exports file
+  copy:
+      dest: /etc/exports
+      content: '/srv/share {{ vmware_ci_nfs_share_network_cidr }}(rw,anonuid={{ vmware_ci_nfs_share_owner_uid }},anongid={{ vmware_ci_nfs_share_owner_gid }})'
+  become: True
+  notify:
+      - Restart nfs-server

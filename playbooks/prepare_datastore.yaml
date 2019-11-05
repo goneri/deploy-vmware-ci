@@ -1,0 +1,6 @@
+- hosts: datastore
+  tasks:
+    - import_role:
+        name: vmware-ci-nfs-share
+    - import_role:
+        name: vmware-ci-proxy

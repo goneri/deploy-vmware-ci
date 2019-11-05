@@ -1,0 +1,6 @@
+- name: Restart nfs-server
+  systemd:
+    state: restarted
+    enabled: True
+    name: nfs-server
+  become: True
