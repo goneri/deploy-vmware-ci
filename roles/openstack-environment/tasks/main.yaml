@@ -1,0 +1,103 @@
+- os_network:
+    state: present
+    name: testlab
+    external: false
+    port_security_enabled: false
+- os_subnet:
+    state: present
+    network_name: testlab
+    name: testlabsubnet
+    cidr: '{{ openstack_environment_testlab_network_cidr }}'
+    enable_dhcp: false
+    gateway_ip: "{{ openstack_environment_hosts.gateway|ipaddr('address') }}"
+    dns_nameservers:
+      - "{{ openstack_environment_hosts.dns|ipaddr('address') }}"
+- os_router:
+    state: present
+    name: router_lab
+    network: '{{ openstack_environment_public_network }}'
+    interfaces:
+      - testlabsubnet
+- os_port:
+    state: present
+    name: port_public_datastore
+    network: private
+    security_groups:
+      - default
+- os_port:
+    state: present
+    name: port_lab_datastore
+    network: testlab
+    fixed_ips:
+      - ip_address: "{{ openstack_environment_hosts.datastore|ipaddr('address') }}"
+- os_port:
+    state: present
+    name: port_lab_vcsa
+    network: testlab
+    fixed_ips:
+      - ip_address: "{{ openstack_environment_hosts['vcsa']|ipaddr('address') }}"
+
+- os_port:
+    state: present
+    name: port_lab_esxi1
+    network: testlab
+    fixed_ips:
+      - ip_address: "{{ openstack_environment_hosts.esxi1|ipaddr('address') }}"
+- os_port:
+    state: present
+    name: port_lab_esxi2
+    network: testlab
+    fixed_ips:
+      - ip_address: "{{ openstack_environment_hosts.esxi2|ipaddr('address') }}"
+- name: launch the ESXi instances
+  os_server:
+    name: "{{ item.name }}"
+    state: present
+    image: "{{ item.image }}"
+    flavor_ram: "{{ item.flavor_ram }}"
+    key_name: goneri
+    config_drive: true
+    auto_ip: false
+    security_groups: []
+    timeout: 600
+    nics:
+    - port-name: "{{ item.port }}"
+    userdata: |
+      #cloud-config
+      bootcmd: []
+      chpasswd:
+        expire: false
+        list: 'root:!234AaAa56'
+      disable_root: false
+      password: '!234AaAa56'
+      resize_rootfs: true
+  with_items:
+    - name: esxi1
+      port: port_lab_esxi1
+      flavor_ram: 4096
+      image: esxi-test
+    - name: esxi2
+      port: port_lab_esxi2
+      flavor_ram: 4096
+      image: esxi-test
+    - name: vcenter
+      port: port_lab_vcsa
+      flavor_ram: 10000
+      image: vCenterServerAppliance
+- name: launch the datastore node
+  os_server:
+    name: datastore
+    state: present
+    image: '{{ openstack_environment_datastore_vm_image }}'
+    boot_from_volume: True
+    terminate_volume: yes
+    flavor: m1.small
+    nics:
+      - port-name: port_public_datastore
+      - port-name: port_lab_datastore
+    key_name: goneri
+    config_drive: true
+    auto_ip: true
+- name: refresh inventory
+  meta: refresh_inventory
+

@@ -1,4 +1,3 @@
-# https://bugs.launchpad.net/nova/+bug/1759420
 - hosts: localhost
   roles:
     - name: openstack-environment
@@ -17,7 +16,7 @@
     - import_role:
         name: vmware-ci-proxy
     - import_role:
-        name: vmware-ci-dns
+        name: vmware-ci-dnsmasq
 
 - hosts: localhost
   tasks:
@@ -53,34 +52,3 @@
       with_items:
           - esxi1
           - esxi2
-
-#- hosts: datastore
-#  vars:
-#    vcenter_validate_certs: False
-#    gather_facts: False
-#    vcsa_ip: '192.168.123.90'
-#    datastore_name: local
-#    ansible_user: centos
-#    vmware_proxy_host: '127.0.0.1'
-#    vmware_proxy_port: 8888
-#  tasks:
-#  - copy:
-#      src: ~/Downloads/VMware-VCSA-all-6.7.0-14367737.iso
-#      dest: ~/Downloads/
-#  - import_role:
-#      name: vcenter-instance
-#    vars:
-#      vcenter_instance:
-#        installation:
-#          from: 'iso'
-#          iso_path: "{{ '~/Downloads/VMware-VCSA-all-6.7.0-14367737.iso' | expanduser }}"
-#        network:  # IP Configuration of the vcenter
-#          address: '{{ vcsa_ip }}'
-#          prefix: 24
-#          gateway: 192.168.123.1
-#          dns: 192.168.123.4
-#          hostname: vcenter.test
-#        esxi:
-#          hostname: '{{ hostvars["esxi-vcenter"].ansible_host }}'
-#          username: root
-#          password: '!234AaAa56'

@@ -1,4 +1,6 @@
 - hosts: datastore
+  vars:
+      ansible_user: centos
   tasks:
     - import_role:
         name: vmware-ci-nfs-share

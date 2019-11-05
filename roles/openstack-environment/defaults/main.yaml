@@ -1,0 +1,12 @@
+# ID or the external network. See: openstack network list --external
+openstack_environment_public_network: fbf9bcc6-cbaa-4c24-8d56-8010915a6494 
+openstack_environment_testlab_network_cidr: 192.168.123.0/24
+openstack_environment_hosts:
+    gateway: "{{ openstack_environment_testlab_network_cidr| ipaddr('net') | ipaddr('1') }}"
+    datastore: "{{ openstack_environment_testlab_network_cidr| ipaddr('net') | ipaddr('4') }}"
+    dns: "{{ openstack_environment_testlab_network_cidr| ipaddr('net') | ipaddr('4') }}"
+    vcsa: "{{ openstack_environment_testlab_network_cidr| ipaddr('net') | ipaddr('8') }}"
+    esxi1: "{{ openstack_environment_testlab_network_cidr| ipaddr('net') | ipaddr('6') }}"
+    esxi2: "{{ openstack_environment_testlab_network_cidr| ipaddr('net') | ipaddr('7') }}"
+openstack_environment_datastore_vm_image: CentOS-7-x86_64-GenericCloud-1804_02
+

@@ -8,14 +8,18 @@
       - /srv/share/vms
       - /srv/share/isos
   become: True
-- name: Copy the ISO images
-  copy:
-    src: 'cache/{{ item.name }}'
+ 
+- name: Download ISO
+  get_url:
+    url: '{{ item.url }}'
     dest: '/srv/share/isos/{{ item.name }}'
     mode: '0644'
   with_items:
       - name: fedora.iso
+        url: https://download.fedoraproject.org/pub/fedora/linux/releases/30/Workstation/x86_64/iso/Fedora-Workstation-Live-x86_64-30-1.2.iso
       - name: centos.iso
+        url: http://isoredirect.centos.org/centos/8/isos/x86_64/CentOS-8-x86_64-1905-dvd1.iso
+ 
 - name: Prepare the /etc/exports file
   copy:
       dest: /etc/exports

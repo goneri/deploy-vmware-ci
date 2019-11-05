@@ -18,6 +18,7 @@
       server=8.8.8.8
       expand-hosts
       domain=test
+      dhcp-option=3,192.168.123.1
       dhcp-option=6,192.168.123.4
       dhcp-range=192.168.123.5,192.168.123.50,12h
       dhcp-host={{ hostvars.vcenter.openstack.addresses.testlab[0]['OS-EXT-IPS-MAC:mac_addr'] }},vcenter,192.168.123.8

@@ -2,6 +2,7 @@
   distro: centos-7
   memory: 1024
   vcpus: 1
+  username: centos
   root_password: '!234AaAa56'
   groups: ['datastore']
   networks:
@@ -34,6 +35,7 @@
     nic_model: e1000
 - name: vcenter
   distro: vCenterServerAppliance
+  username: root
   memory: 8000
   vcpus: 2
   root_password: '!234AaAa56'
