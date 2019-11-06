@@ -13,13 +13,23 @@ It can easier target a local Libvirt hypervisor, or an OpenStack tenant.
 ## Requirements
 
 - a Python virtualenv
-- Virt-Lightning (for Libvirt)
 - memory 20GB
 - vcpus: 2 for vcenter, 1 for ESXi, more will probably seriously increase the performance
 - Ansible 2.8+
 - Qcow2 Images:
     - ESXi: https://github.com/virt-lightning/esxi-cloud-images
     - vcenter: https://github.com/goneri/vcsa_to_qcow2
+
+### Libvirt
+
+- A working libvirt installation
+- Virt-Lightning
+- Ensure nested KVM is enabled
+    ```shell
+    cat /etc/modprobe.d/kvm.conf
+    options kvm_intel nested=1 enable_apicv=n
+    options kvm ignore_msrs=1
+    ```
 
 ## Installation
 
