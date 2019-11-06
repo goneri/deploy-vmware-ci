@@ -75,11 +75,11 @@
     - name: esxi1
       port: port_lab_esxi1
       flavor_ram: 4096
-      image: esxi-test
+      image: '{{ openstack_environment_esxi_vm_image }}'
     - name: esxi2
       port: port_lab_esxi2
       flavor_ram: 4096
-      image: esxi-test
+      image: '{{ openstack_environment_esxi_vm_image }}'
     - name: vcenter
       port: port_lab_vcsa
       flavor_ram: 10000
