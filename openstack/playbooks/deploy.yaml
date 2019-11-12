@@ -11,44 +11,22 @@
       wait_for_connection:
     - name: gather facts
       setup:
-    - import_role:
-        name: vmware-ci-nfs-share
-    - import_role:
-        name: vmware-ci-proxy
+    - name: Overwrite the DNS set by the DHCP, since it points on the local machine
+      copy:
+        dest: /etc/resolv.conf
+        content: |
+            nameserver 8.8.8.8
+            nameserver 8.8.4.4
+      become: true
     - import_role:
         name: vmware-ci-dnsmasq
+    - import_role:
+        name: vmware-ci-nfs-share
 
-- hosts: localhost
+- hosts: "{{ prefix }}vcenter"
+  gather_facts: no
+  vars:
+    ansible_user: root
+    ansible_password: '!234AaAa56'
   tasks:
-    - name: Open the proxy port forwarding
-      command: 'ssh -L 8888:127.0.0.1:8888 -fN centos@{{ hostvars.datastore.ansible_host }}'
-    - name: Start ntpd setting for an ESXi Host
-      vmware_host_service_manager:
-        hostname: '{{ item }}'
-        username: root
-        password: '!234AaAa56'
-        proxy_host: 127.0.0.1
-        proxy_port: 8888
-        esxi_hostname: '{{ item }}'
-        validate_certs: false
-        service_name: ntpd
-        state: present
-      with_items:
-          - esxi1
-          - esxi2
-    - name: Set NTP setting for all ESXi Host in given Cluster
-      vmware_host_ntp:
-        hostname: '{{ item }}'
-        username: root
-        password: '!234AaAa56'
-        proxy_host: 127.0.0.1
-        proxy_port: 8888
-        esxi_hostname: '{{ item }}'
-        validate_certs: false
-        state: present
-        ntp_servers:
-            - 0.pool.ntp.org
-            - 1.pool.ntp.org
-      with_items:
-          - esxi1
-          - esxi2
+    - command: ifconfig eth0 mtu 1450
