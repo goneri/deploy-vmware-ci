@@ -71,6 +71,9 @@
       disable_root: false
       password: '!234AaAa56'
       resize_rootfs: true
+    security_groups:
+      - default
+      - ssh
   with_items:
     - name: esxi1
       port: port_lab_esxi1
