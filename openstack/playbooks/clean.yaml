@@ -1,7 +1,7 @@
 - hosts: localhost
   tasks:
     - os_server:
-        name: '{{ item }}'
+        name: '{{prefix}}{{ item }}'
         state: absent
       with_items:
         - esxi1

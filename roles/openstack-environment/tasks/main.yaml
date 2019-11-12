@@ -1,69 +1,97 @@
 - os_network:
     state: present
-    name: testlab
-    external: false
-    port_security_enabled: false
+    name: "{{ prefix }}testlab"
+    port_security_enabled: true
 - os_subnet:
     state: present
-    network_name: testlab
-    name: testlabsubnet
+    network_name: "{{ prefix }}testlab"
+    name: "{{ prefix }}testlabsubnet"
     cidr: '{{ openstack_environment_testlab_network_cidr }}'
-    enable_dhcp: false
+    enable_dhcp: true
     gateway_ip: "{{ openstack_environment_hosts.gateway|ipaddr('address') }}"
     dns_nameservers:
       - "{{ openstack_environment_hosts.dns|ipaddr('address') }}"
 - os_router:
     state: present
-    name: router_lab
+    name: "{{ prefix }}router_lab"
     network: '{{ openstack_environment_public_network }}'
     interfaces:
-      - testlabsubnet
+      - "{{ prefix }}testlabsubnet"
+- os_security_group:
+    name: ssh
+    state: present
+- os_security_group_rule:
+    security_group: ssh
+    protocol: tcp
+    port_range_min: 22
+    port_range_max: 22
+    remote_ip_prefix: 0.0.0.0/0
 - os_port:
     state: present
-    name: port_public_datastore
-    network: private
+    name: "{{ prefix }}port_lab_datastore"
+    network: "{{ prefix }}testlab"
     security_groups:
       - default
-- os_port:
-    state: present
-    name: port_lab_datastore
-    network: testlab
+      - ssh
     fixed_ips:
       - ip_address: "{{ openstack_environment_hosts.datastore|ipaddr('address') }}"
 - os_port:
     state: present
-    name: port_lab_vcsa
-    network: testlab
+    name: "{{ prefix }}port_lab_vcsa"
+    network: "{{ prefix }}testlab"
     fixed_ips:
       - ip_address: "{{ openstack_environment_hosts['vcsa']|ipaddr('address') }}"
 
 - os_port:
     state: present
-    name: port_lab_esxi1
-    network: testlab
+    name: "{{ prefix }}port_lab_esxi1"
+    network: "{{ prefix }}testlab"
     fixed_ips:
       - ip_address: "{{ openstack_environment_hosts.esxi1|ipaddr('address') }}"
 - os_port:
     state: present
-    name: port_lab_esxi2
-    network: testlab
+    name: "{{ prefix }}port_lab_esxi2"
+    network: "{{ prefix }}testlab"
     fixed_ips:
       - ip_address: "{{ openstack_environment_hosts.esxi2|ipaddr('address') }}"
+
+- name: launch the datastore node
+  os_server:
+    name: "{{ prefix }}datastore"
+    state: present
+    image: '{{ openstack_environment_datastore_vm_image }}'
+    boot_from_volume: True
+    terminate_volume: yes
+    flavor: m1.small
+    nics:
+      - port-name: "{{ prefix }}port_lab_datastore"
+    key_name: goneri
+    auto_ip: true
+    security_groups:
+      - default
+      - ssh
+  register: datastore_info
+- debug: var=datastore_info
+
+
 - name: launch the ESXi instances
   os_server:
-    name: "{{ item.name }}"
+    name: "{{ prefix }}{{ item.name }}"
     state: present
     image: "{{ item.image }}"
+    boot_from_volume: True
+    terminate_volume: yes
     flavor_ram: "{{ item.flavor_ram }}"
     key_name: goneri
     config_drive: true
-    auto_ip: false
-    security_groups: []
+    #    auto_ip: false
     timeout: 600
     nics:
-    - port-name: "{{ item.port }}"
+    - port-name: "{{ prefix }}{{ item.port }}"
     userdata: |
       #cloud-config
+      hostname: "{{ item.name }}"
+      fqdn: "{{ item.name }}"
       bootcmd: []
       chpasswd:
         expire: false
@@ -85,22 +113,9 @@
       image: '{{ openstack_environment_esxi_vm_image }}'
     - name: vcenter
       port: port_lab_vcsa
-      flavor_ram: 10000
+      flavor_ram: 9500
       image: vCenterServerAppliance
-- name: launch the datastore node
-  os_server:
-    name: datastore
-    state: present
-    image: '{{ openstack_environment_datastore_vm_image }}'
-    boot_from_volume: True
-    terminate_volume: yes
-    flavor: m1.small
-    nics:
-      - port-name: port_public_datastore
-      - port-name: port_lab_datastore
-    key_name: goneri
-    config_drive: true
-    auto_ip: true
+
 - name: refresh inventory
   meta: refresh_inventory
 

@@ -2,7 +2,7 @@
   roles:
     - name: openstack-environment
 
-- hosts: datastore
+- hosts: "{{ prefix }}datastore"
   gather_facts: no
   vars:
     ansible_user: centos

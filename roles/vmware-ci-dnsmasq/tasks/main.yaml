@@ -21,7 +21,7 @@
       dhcp-option=3,192.168.123.1
       dhcp-option=6,192.168.123.4
       dhcp-range=192.168.123.5,192.168.123.50,12h
-      dhcp-host={{ hostvars.vcenter.openstack.addresses.testlab[0]['OS-EXT-IPS-MAC:mac_addr'] }},vcenter,192.168.123.8
+      dhcp-host={{ hostvars[prefix + 'vcenter'].openstack.addresses[prefix + 'testlab'][0]['OS-EXT-IPS-MAC:mac_addr'] }},vcenter,192.168.123.8
       local=/test/
   notify: restart dnsmasq
   become: true
