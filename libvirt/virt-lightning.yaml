@@ -4,6 +4,7 @@
   memory: 1024
   vcpus: 1
   username: centos
+  root_disk_size: 25
   root_password: '!234AaAa56'
   groups: ['datastore']
   networks:
@@ -13,8 +14,6 @@
 - name: esxi1
   fqdn: esxi1.test
   distro: esxi-6.7.0-20190802001-STANDARD
-  memory: 4096
-  vcpus: 1
   root_password: '!234AaAa56'
   groups: ['all_esxi', 'esxi_lab']
   networks:
@@ -26,8 +25,6 @@
 - name: esxi2
   fqdn: esxi2.test
   distro: esxi-6.7.0-20190802001-STANDARD
-  memory: 4096
-  vcpus: 1
   root_password: '!234AaAa56'
   groups: ['all_esxi', 'esxi_lab']
   networks:
@@ -39,9 +36,6 @@
 - name: vcenter
   fqdn: vcenter.test
   distro: VMware-VCSA-all-6.7.0-14367737
-  username: root
-  memory: 8000
-  vcpus: 2
   root_password: '!234AaAa56'
   networks:
   - network: virt-lightning
