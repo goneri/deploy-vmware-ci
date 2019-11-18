@@ -11,6 +11,16 @@
     gateway_ip: "{{ openstack_environment_hosts.gateway|ipaddr('address') }}"
     dns_nameservers:
       - "{{ openstack_environment_hosts.dns|ipaddr('address') }}"
+- os_network:
+    state: present
+    name: "{{ prefix }}testlabdummy"
+    port_security_enabled: true
+- os_subnet:
+    state: present
+    network_name: "{{ prefix }}testlabdummy"
+    name: "{{ prefix }}testlabdummysubnet"
+    cidr: 192.168.10.0/24
+    enable_dhcp: true
 - os_router:
     state: present
     name: "{{ prefix }}router_lab"
@@ -84,10 +94,11 @@
     flavor_ram: "{{ item.flavor_ram }}"
     key_name: goneri
     config_drive: true
-    #    auto_ip: false
+    auto_ip: false
     timeout: 600
     nics:
     - port-name: "{{ prefix }}{{ item.port }}"
+    - net-name: "{{ prefix }}testlabdummy"
     userdata: |
       #cloud-config
       hostname: "{{ item.name }}"

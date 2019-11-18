@@ -25,3 +25,9 @@
     - os_network:
         state: absent
         name: "{{ prefix }}testlab"
+    - os_subnet:
+        state: absent
+        name: "{{ prefix }}testlabdummysubnet"
+    - os_network:
+        state: absent
+        name: "{{ prefix }}testlabdummy"
