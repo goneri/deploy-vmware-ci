@@ -113,8 +113,8 @@
       image: '{{ openstack_environment_esxi_vm_image }}'
     - name: vcenter
       port: port_lab_vcsa
-      flavor_ram: 9500
-      image: vCenterServerAppliance
+      flavor_ram: 12000
+      image: '{{ openstack_environment_vcsa_vm_image }}'
 
 - name: refresh inventory
   meta: refresh_inventory

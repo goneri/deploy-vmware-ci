@@ -10,4 +10,4 @@ openstack_environment_hosts:
     esxi2: "{{ openstack_environment_testlab_network_cidr| ipaddr('net') | ipaddr('7') }}"
 openstack_environment_esxi_vm_image: esxi-6.7.0-20190802001-STANDARD
 openstack_environment_datastore_vm_image: CentOS-7-x86_64-GenericCloud
-
+openstack_environment_vcsa_vm_image: VMware-VCSA-all-6.7.0-14836122

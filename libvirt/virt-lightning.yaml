@@ -38,7 +38,7 @@
     nic_model: e1000
 - name: vcenter
   fqdn: vcenter.test
-  distro: vCenterServerAppliance
+  distro: VMware-VCSA-all-6.7.0-14367737
   username: root
   memory: 8000
   vcpus: 2
