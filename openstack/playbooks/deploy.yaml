@@ -22,11 +22,3 @@
         name: vmware-ci-dnsmasq
     - import_role:
         name: vmware-ci-nfs-share
-
-- hosts: "{{ prefix }}vcenter"
-  gather_facts: no
-  vars:
-    ansible_user: root
-    ansible_password: '!234AaAa56'
-  tasks:
-    - command: ifconfig eth0 mtu 1450
