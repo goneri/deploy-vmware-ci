@@ -17,7 +17,7 @@
       server=1.1.1.1
       server=8.8.8.8
       expand-hosts
-      domain=test
+      #domain=test
       dhcp-option=3,192.168.123.1
       dhcp-option=6,192.168.123.4
       dhcp-range=192.168.123.5,192.168.123.50,12h
@@ -35,10 +35,10 @@
     content: |
       127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
       ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
-      192.168.123.4  datastore
-      192.168.123.6  esxi1
-      192.168.123.7  esxi2
-      192.168.123.8 vcenter
+      192.168.123.4  datastore datastore.test
+      192.168.123.6  esxi1 esxi1.test
+      192.168.123.7  esxi2 esxi2.test
+      192.168.123.8 vcenter vcenter.test
   become: true
   notify: restart dnsmasq
 - meta: flush_handlers
