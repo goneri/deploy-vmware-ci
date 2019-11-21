@@ -1,0 +1,15 @@
+- hosts: "{{ prefix }}datastore"
+  vars:
+    ansible_user: centos
+  tasks:
+    - package:
+        name: tmux
+        state: present
+      become: true
+    - copy:
+        src: /home/goneri/git_repos/deploy-vmware-ci/run_test.sh
+        dest: run_test.sh
+    - shell: "tmux new-session -d -s run_test 'bash run_test.sh > output.log'"
+      args:
+        creates: output.log
+
