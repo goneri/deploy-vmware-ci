@@ -10,7 +10,8 @@
     enable_dhcp: true
     gateway_ip: "{{ openstack_environment_hosts.gateway|ipaddr('address') }}"
     dns_nameservers:
-      - "{{ openstack_environment_hosts.dns|ipaddr('address') }}"
+#        #      - "{{ openstack_environment_hosts.dns|ipaddr('address') }}"
+      - 8.8.8.8
 - os_network:
     state: present
     name: "{{ prefix }}testlabdummy"
@@ -36,34 +37,34 @@
     port_range_min: 22
     port_range_max: 22
     remote_ip_prefix: 0.0.0.0/0
-- os_port:
-    state: present
-    name: "{{ prefix }}port_lab_datastore"
-    network: "{{ prefix }}testlab"
-    security_groups:
-      - default
-      - ssh
-    fixed_ips:
-      - ip_address: "{{ openstack_environment_hosts.datastore|ipaddr('address') }}"
-- os_port:
-    state: present
-    name: "{{ prefix }}port_lab_vcsa"
-    network: "{{ prefix }}testlab"
-    fixed_ips:
-      - ip_address: "{{ openstack_environment_hosts['vcsa']|ipaddr('address') }}"
-
-- os_port:
-    state: present
-    name: "{{ prefix }}port_lab_esxi1"
-    network: "{{ prefix }}testlab"
-    fixed_ips:
-      - ip_address: "{{ openstack_environment_hosts.esxi1|ipaddr('address') }}"
-- os_port:
-    state: present
-    name: "{{ prefix }}port_lab_esxi2"
-    network: "{{ prefix }}testlab"
-    fixed_ips:
-      - ip_address: "{{ openstack_environment_hosts.esxi2|ipaddr('address') }}"
+#- os_port:
+#    state: present
+#    name: "{{ prefix }}port_lab_datastore"
+#    network: "{{ prefix }}testlab"
+#    security_groups:
+#      - default
+#      - ssh
+#    fixed_ips:
+#      - ip_address: "{{ openstack_environment_hosts.datastore|ipaddr('address') }}"
+#- os_port:
+#    state: present
+#    name: "{{ prefix }}port_lab_vcsa"
+#    network: "{{ prefix }}testlab"
+#    fixed_ips:
+#      - ip_address: "{{ openstack_environment_hosts['vcsa']|ipaddr('address') }}"
+#
+#- os_port:
+#    state: present
+#    name: "{{ prefix }}port_lab_esxi1"
+#    network: "{{ prefix }}testlab"
+#    fixed_ips:
+#      - ip_address: "{{ openstack_environment_hosts.esxi1|ipaddr('address') }}"
+#- os_port:
+#    state: present
+#    name: "{{ prefix }}port_lab_esxi2"
+#    network: "{{ prefix }}testlab"
+#    fixed_ips:
+#      - ip_address: "{{ openstack_environment_hosts.esxi2|ipaddr('address') }}"
 
 - name: launch the datastore node
   os_server:
@@ -74,7 +75,8 @@
     terminate_volume: yes
     flavor: m1.small
     nics:
-      - port-name: "{{ prefix }}port_lab_datastore"
+      - net-name: "{{ prefix }}testlab"
+      #   - port-name: "{{ prefix }}port_lab_datastore"
     key_name: goneri
     auto_ip: true
     security_groups:
@@ -82,6 +84,35 @@
       - ssh
   register: datastore_info
 - debug: var=datastore_info
+
+- name: launch the vcenter instance
+  os_server:
+    name: "{{ prefix }}vcenter"
+    state: present
+    image: '{{ openstack_environment_vcsa_vm_image }}'
+    boot_from_volume: true
+    terminate_volume: yes
+    flavor_ram: 8000
+    key_name: goneri
+    config_drive: true
+    #    auto_ip: false
+    timeout: 600
+    nics:
+      - net-name: "{{ prefix }}testlab"
+    security_groups:
+      - default
+      - ssh
+      - https
+    userdata: |
+      #cloud-config
+      hostname: vcenter.test
+      fqdn: vcenter.test
+#      chpasswd:
+#        expire: false
+#        list: 'root:!234AaAa56'
+#      disable_root: false
+#      password: '!234AaAa56'
+
 
 
 - name: launch the ESXi instances
@@ -97,13 +128,13 @@
     auto_ip: false
     timeout: 600
     nics:
-    - port-name: "{{ prefix }}{{ item.port }}"
-    - net-name: "{{ prefix }}testlabdummy"
+      - net-name: "{{ prefix }}testlab"
+      #- port-name: "{{ prefix }}{{ item.port }}"
+      - net-name: "{{ prefix }}testlabdummy"
     userdata: |
       #cloud-config
       hostname: "{{ item.name }}"
       fqdn: "{{ item.name }}"
-      bootcmd: []
       chpasswd:
         expire: false
         list: 'root:!234AaAa56'
@@ -119,10 +150,6 @@
       port: port_lab_esxi2
       flavor_ram: 4096
       image: '{{ openstack_environment_esxi_vm_image }}'
-    - name: vcenter
-      port: port_lab_vcsa
-      flavor_ram: 12000
-      image: '{{ openstack_environment_vcsa_vm_image }}'
 
 - name: refresh inventory
   meta: refresh_inventory

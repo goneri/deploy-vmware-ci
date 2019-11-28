@@ -9,16 +9,71 @@
   tasks:
     - name: Wait 600 seconds for target connection to become reachable/usable
       wait_for_connection:
-    - name: gather facts
-      setup:
-    - name: Overwrite the DNS set by the DHCP, since it points on the local machine
+    - name: Write the /etc/hosts file
       copy:
-        dest: /etc/resolv.conf
         content: |
-            nameserver 8.8.8.8
-            nameserver 8.8.4.4
+          127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+          ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+          {% for host in ['datastore', 'esxi1', 'esxi2', 'vcenter'] %}
+          {{ hostvars[prefix + host]['openstack']['addresses']['lab1testlab'][0]['addr']}} {{ host }}.test {{ host }}
+          {% endfor %}
+        dest: /etc/hosts
       become: true
     - import_role:
-        name: vmware-ci-dnsmasq
-    - import_role:
         name: vmware-ci-nfs-share
+
+- hosts: "{{ prefix }}vcenter"
+  gather_facts: no
+  vars:
+    ansible_user: root
+  tasks:
+    - name: Write the /etc/hosts file
+      copy:
+        content: |
+          127.0.0.1  vcenter.test vcenter localhost
+          ::1  vcenter.test vcenter localhost ipv6-localhost ipv6-loopback
+          {% for host in ['datastore', 'esxi1', 'esxi2'] %}
+          {{ hostvars[prefix + host]['openstack']['addresses']['lab1testlab'][0]['addr']}} {{ host }}.test {{ host }}
+          {% endfor %}
+        dest: /etc/hosts
+      become: true
+      register: hosts_status
+    - name: Unconditionally reboot the machine with all defaults
+      reboot:
+      when: hosts_status.changed
+    - name: "wait for the vcenter service"
+      uri:
+        url: "https://127.0.0.1"
+        validate_certs: false
+        return_content: yes
+      register: result
+      until:
+          - "result.status == 200"
+          - "'vmc-documentation-link' in result.content"
+      retries: 180
+      delay: 5
+
+- hosts: localhost
+  tasks:
+    - debug: var=hostvars.lab1datastore.ansible_host
+
+- hosts: "{{ prefix }}esxi1,{{ prefix }}esxi2"
+  gather_facts: no
+  vars:
+    ansible_ssh_common_args: "-o stricthostkeychecking=no -o userknownhostsfile=/dev/null -o ProxyCommand=\"ssh -W {{ hostvars[inventory_hostname]['openstack']['addresses']['lab1testlab'][0]['addr'] }}:22 -q centos@{{ hostvars.lab1datastore.ansible_host }}\""
+    ansible_user: root
+    ansible_python_interpreter: /bin/python
+  tasks:
+    - name: Write the /etc/hosts file
+      copy:
+        content: |
+          127.0.0.1       localhost.localdomain localhost
+          ::1             localhost.localdomain localhost
+          {% for host in ['datastore', 'esxi1', 'esxi2', 'vcenter'] %}
+          {{ hostvars[prefix + host]['openstack']['addresses']['lab1testlab'][0]['addr']}} {{ host }}.test {{ host }}
+          {% endfor %}
+        dest: /etc/hosts
+      become: true
+    - debug: var=inventory_hostname
+    - command: "esxcli system hostname set --fqdn={{ inventory_hostname| regex_replace('^'+prefix,'') }}.test"
+
