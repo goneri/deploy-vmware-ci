@@ -21,9 +21,9 @@
         url: http://isoredirect.centos.org/centos/8/isos/x86_64/CentOS-8-x86_64-1905-dvd1.iso
  
 - name: Prepare the /etc/exports file
-  copy:
+  template:
+      src: exports.j2
       dest: /etc/exports
-      content: '/srv/share {{ vmware_ci_nfs_share_network_cidr }}(rw,anonuid={{ vmware_ci_nfs_share_owner_uid }},anongid={{ vmware_ci_nfs_share_owner_gid }})'
   become: True
   notify:
       - Restart nfs-server

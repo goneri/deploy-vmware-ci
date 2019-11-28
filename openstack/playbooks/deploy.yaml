@@ -15,12 +15,16 @@
           127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
           ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
           {% for host in ['datastore', 'esxi1', 'esxi2', 'vcenter'] %}
-          {{ hostvars[prefix + host]['openstack']['addresses']['lab1testlab'][0]['addr']}} {{ host }}.test {{ host }}
+          {{ hostvars[prefix + host]['openstack']['addresses'][prefix + 'testlab'][0]['addr']}} {{ host }}.test {{ host }}
           {% endfor %}
         dest: /etc/hosts
       become: true
     - import_role:
         name: vmware-ci-nfs-share
+      vars:
+        vmware_ci_nfs_share_allow_ips:
+            - "{{ hostvars[prefix + 'esxi1']['openstack']['addresses'][prefix + 'testlab'][0]['addr']}}"
+            - "{{ hostvars[prefix + 'esxi2']['openstack']['addresses'][prefix + 'testlab'][0]['addr']}}"
 
 - hosts: "{{ prefix }}vcenter"
   gather_facts: no
