@@ -25,7 +25,7 @@
 - os_router:
     state: present
     name: "{{ prefix }}router_lab"
-    network: '{{ openstack_environment_public_network }}'
+    network: '{{ (networks.openstack_networks|selectattr("router:external")|first)["id"] }}'
     interfaces:
       - "{{ prefix }}testlabsubnet"
 - os_security_group:

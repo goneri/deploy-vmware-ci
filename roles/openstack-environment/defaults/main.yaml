@@ -1,5 +1,4 @@
 # ID or the external network. See: openstack network list --external
-openstack_environment_public_network: public
 openstack_environment_testlab_network_cidr: 192.168.123.0/24
 openstack_environment_hosts:
     gateway: "{{ openstack_environment_testlab_network_cidr| ipaddr('net') | ipaddr('1') }}"
