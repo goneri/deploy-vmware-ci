@@ -1,7 +1,7 @@
 - hosts: localhost
   tasks:
     - set_fact:
-        vmware__ci_set_passwords_passwords:
+        vmware_ci_set_passwords_passwords:
             root: "{{ lookup('password', '/dev/null length=15 chars=ascii_letters,digits,hexdigits') }}56"
             zuul: "{{ lookup('password', '/dev/null length=15 chars=ascii_letters,digits,hexdigits') }}56"
 
