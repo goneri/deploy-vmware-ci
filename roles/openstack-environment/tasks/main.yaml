@@ -22,6 +22,9 @@
     name: "{{ prefix }}testlabdummysubnet"
     cidr: 192.168.10.0/24
     enable_dhcp: true
+- os_networks_info:
+    interface: public
+  register: networks
 - os_router:
     state: present
     name: "{{ prefix }}router_lab"
