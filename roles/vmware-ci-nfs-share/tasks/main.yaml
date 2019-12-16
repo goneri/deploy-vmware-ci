@@ -19,7 +19,15 @@
         url: https://download.fedoraproject.org/pub/fedora/linux/releases/30/Workstation/x86_64/iso/Fedora-Workstation-Live-x86_64-30-1.2.iso
       - name: centos.iso
         url: http://isoredirect.centos.org/centos/8/isos/x86_64/CentOS-8-x86_64-1905-dvd1.iso
- 
+
+- name: Install nfs-utils
+  package:
+    name: nfs-utils
+    state: latest
+  become: true
+  notify:
+      - Restart nfs-server
+
 - name: Prepare the /etc/exports file
   template:
       src: exports.j2
