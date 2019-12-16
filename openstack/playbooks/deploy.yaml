@@ -34,9 +34,9 @@
     - name: Write the /etc/hosts file
       copy:
         content: |
-          127.0.0.1  vcenter.test vcenter localhost
-          ::1  vcenter.test vcenter localhost ipv6-localhost ipv6-loopback
-          {% for host in ['datastore', 'esxi1', 'esxi2'] %}
+          127.0.0.1 localhost
+          ::1  localhost ipv6-localhost ipv6-loopback
+          {% for host in ['datastore', 'esxi1', 'esxi2', 'vcenter'] %}
           {{ hostvars[prefix + host]['openstack']['addresses']['lab1testlab'][0]['addr']}} {{ host }}.test {{ host }}
           {% endfor %}
         dest: /etc/hosts

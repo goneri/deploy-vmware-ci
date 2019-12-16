@@ -1,3 +1,13 @@
+- hosts: vcenter
+  tasks:
+   - copy:
+       content: |
+         127.0.0.1 localhost
+         192.168.123.4 datastore.test datastore
+         192.168.123.6 esxi1.test esxi1
+         192.168.123.7 esxi2.test esxi2
+         192.168.123.8 vcenter.test vcenter
+       dest: /etc/hosts
 - hosts: datastore
   vars:
       ansible_user: centos
