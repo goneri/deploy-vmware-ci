@@ -27,5 +27,6 @@
         name: vmware-ci-nfs-share
       vars:
         vmware_ci_nfs_share_allow_ips:
-          - 192.168.123.6
-          - 192.168.123.7
+          - '{{ "esxi1" in hostvars and hostvars.esxi1.ansible_host }}'
+          - '{{ "esxi2" in hostvars and hostvars.esxi2.ansible_host }}'
+          - '{{ "esxi3" in hostvars and hostvars.esxi3.ansible_host }}'

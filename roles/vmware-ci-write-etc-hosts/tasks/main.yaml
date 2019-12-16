@@ -6,7 +6,7 @@
       127.0.0.1 localhost
       ::1 localhost
       {% for host in ['datastore', 'esxi1', 'esxi2', 'esxi3', 'vcenter'] %}
-      {% if vmware_ci_write_etc_hosts_mapping[host] %}
+      {% if host in vmware_ci_write_etc_hosts_mapping and vmware_ci_write_etc_hosts_mapping[host] %}
       {{ vmware_ci_write_etc_hosts_mapping[host] }} {{ host }}.test {{ host }}
 
       {% endif %}
