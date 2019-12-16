@@ -1,3 +1,10 @@
+- hosts: localhost
+  tasks:
+    - set_fact:
+        vmware__ci_set_passwords_passwords:
+            root: "{{ lookup('password', '/dev/null length=15 chars=ascii_letters,digits,hexdigits') }}56"
+            zuul: "{{ lookup('password', '/dev/null length=15 chars=ascii_letters,digits,hexdigits') }}56"
+
 - hosts: all
   tasks:
     - import_role:
@@ -9,6 +16,8 @@
           esxi2: '{{ "esxi2" in hostvars and hostvars.esxi2.ansible_host }}'
           esxi3: '{{ "esxi3" in hostvars and hostvars.esxi3.ansible_host }}'
           datastore: '{{ hostvars.datastore.ansible_host }}'
+    - import_role:
+        name: vmware-ci-set-passwords
 
 - hosts: datastore
   vars:
