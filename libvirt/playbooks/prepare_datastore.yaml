@@ -1,13 +1,15 @@
-- hosts: vcenter
+- hosts: all
   tasks:
-   - copy:
-       content: |
-         127.0.0.1 localhost
-         192.168.123.4 datastore.test datastore
-         192.168.123.6 esxi1.test esxi1
-         192.168.123.7 esxi2.test esxi2
-         192.168.123.8 vcenter.test vcenter
-       dest: /etc/hosts
+    - import_role:
+        name: vmware-ci-write-etc-hosts
+      vars:
+        vmware_ci_write_etc_hosts_mapping:
+          vcenter: '{{ hostvars.vcenter.ansible_host }}'
+          esxi1: '{{ "esxi1" in hostvars and hostvars.esxi1.ansible_host }}'
+          esxi2: '{{ "esxi2" in hostvars and hostvars.esxi2.ansible_host }}'
+          esxi3: '{{ "esxi3" in hostvars and hostvars.esxi3.ansible_host }}'
+          datastore: '{{ hostvars.datastore.ansible_host }}'
+
 - hosts: datastore
   vars:
       ansible_user: centos
