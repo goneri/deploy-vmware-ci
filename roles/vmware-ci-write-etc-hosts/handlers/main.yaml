@@ -1,0 +1,5 @@
+- name: reboot vcenter
+  reboot:
+  become: true
+  when:
+    - inventory_hostname == 'vcenter'
