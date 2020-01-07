@@ -1,3 +1,4 @@
+---
 - name: Save the password in the vcenter configuration file (ansible-test)
   template:
     src: cloud-config-vcenter.ini.j2
