@@ -10,7 +10,6 @@
   networks:
   - network: virt-lightning
     ipv4: 192.168.123.4
-  - network: default
 - name: esxi1
   fqdn: esxi1.test
   distro: esxi-6.7.0-20190802001-STANDARD
