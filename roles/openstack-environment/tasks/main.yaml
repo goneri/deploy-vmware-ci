@@ -49,35 +49,6 @@
     port_range_min: 443
     port_range_max: 443
     remote_ip_prefix: 0.0.0.0/0
-#- os_port:
-#    state: present
-#    name: "{{ prefix }}port_lab_datastore"
-#    network: "{{ prefix }}testlab"
-#    security_groups:
-#      - default
-#      - ssh
-#    fixed_ips:
-#      - ip_address: "{{ openstack_environment_hosts.datastore|ipaddr('address') }}"
-#- os_port:
-#    state: present
-#    name: "{{ prefix }}port_lab_vcsa"
-#    network: "{{ prefix }}testlab"
-#    fixed_ips:
-#      - ip_address: "{{ openstack_environment_hosts['vcsa']|ipaddr('address') }}"
-#
-#- os_port:
-#    state: present
-#    name: "{{ prefix }}port_lab_esxi1"
-#    network: "{{ prefix }}testlab"
-#    fixed_ips:
-#      - ip_address: "{{ openstack_environment_hosts.esxi1|ipaddr('address') }}"
-#- os_port:
-#    state: present
-#    name: "{{ prefix }}port_lab_esxi2"
-#    network: "{{ prefix }}testlab"
-#    fixed_ips:
-#      - ip_address: "{{ openstack_environment_hosts.esxi2|ipaddr('address') }}"
-
 - name: launch the datastore node
   os_server:
     name: "{{ prefix }}datastore"
@@ -88,7 +59,6 @@
     flavor: m1.small
     nics:
       - net-name: "{{ prefix }}testlab"
-      #   - port-name: "{{ prefix }}port_lab_datastore"
     key_name: goneri
     auto_ip: true
     security_groups:
