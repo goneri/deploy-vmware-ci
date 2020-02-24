@@ -1,3 +1,16 @@
+- hosts: localhost
+  tasks:
+    - import_role:
+        name: vmware-ci-configure-ansible-test
+      vars:
+        vmware_ci_configure_ansible_test_ansible_path: /home/goneri/git_repos/ansible_projects/c
+    - import_role:
+        name: ansible-test
+      vars:
+        ansible_test_location: /home/goneri/git_repos/ansible_projects/c
+        ansible_test_integration_targets: vmware_vswitch
+        ansible_test_venv_path: /home/goneri/git_repos/ansible_projects/c/.virtualenv/py37/
+        #
 - hosts: "{{ prefix }}datastore"
   vars:
     ansible_user: centos
