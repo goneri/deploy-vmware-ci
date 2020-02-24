@@ -1,7 +1,12 @@
+- os_keypair:
+    state: present
+    name: local_ssh_key
+    public_key_file: /home/goneri/.ssh/id_rsa.pub
 - os_network:
     state: present
     name: "{{ prefix }}testlab"
     port_security_enabled: true
+  register: testlab_info
 - os_subnet:
     state: present
     network_name: "{{ prefix }}testlab"
@@ -49,6 +54,7 @@
     port_range_min: 443
     port_range_max: 443
     remote_ip_prefix: 0.0.0.0/0
+- debug: var=testlab_info
 - name: launch the datastore node
   os_server:
     name: "{{ prefix }}datastore"
@@ -58,8 +64,8 @@
     terminate_volume: yes
     flavor: m1.small
     nics:
-      - net-name: "{{ prefix }}testlab"
-    key_name: goneri
+      - net-id: "{{ testlab_info.id }}"
+    key_name: local_ssh_key
     auto_ip: true
     security_groups:
       - default
@@ -74,8 +80,8 @@
     image: '{{ openstack_environment_vcsa_vm_image }}'
     boot_from_volume: true
     terminate_volume: yes
-    flavor_ram: 8000
-    key_name: goneri
+    flavor_ram: 9000
+    key_name: local_ssh_key
     config_drive: true
     #    auto_ip: false
     timeout: 600
@@ -105,7 +111,7 @@
     boot_from_volume: True
     terminate_volume: yes
     flavor_ram: "{{ item.flavor_ram }}"
-    key_name: goneri
+    key_name: local_ssh_key
     config_drive: true
     auto_ip: false
     timeout: 600
