@@ -19,6 +19,17 @@
     - import_role:
         name: vmware-ci-set-passwords
 
+- hosts: vcenter
+  gather_facts: false
+  tasks:
+    - import_role:
+        name: configure-swap
+      vars:
+        configure_swap_current_total: 0
+        configure_swap_size: 2000
+    - import_role:
+        name: vmware-ci-vcenter-services
+
 - hosts: datastore
   vars:
       ansible_user: centos
