@@ -15,9 +15,9 @@ class DriverOpenStack:
 
     @staticmethod
     def deploy(args):
-        subprocess.call(["ansible-playbook", "openstack/playbooks/deploy.yaml", "-i", "openstack/inventory/openstack.yaml", "-e", "prefix=%s" % args.prefix])
+        subprocess.check_call(["ansible-playbook", "openstack/playbooks/deploy.yaml", "-i", "openstack/inventory/openstack.yaml", "-e", "prefix=%s" % args.prefix])
         if args.run_test:
-            subprocess.call(["ansible-playbook", "-vv", "playbooks/run_test.yaml", "-i", "openstack/inventory/openstack.yaml", "-e", "prefix=%s" % args.prefix])
+            subprocess.check_call(["ansible-playbook", "-vv", "playbooks/run_test.yaml", "-i", "openstack/inventory/openstack.yaml", "-e", "prefix=%s" % args.prefix])
 
 class DriverLibvirt:
 
