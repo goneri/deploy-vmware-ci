@@ -7,11 +7,11 @@ class DriverOpenStack:
 
     @staticmethod
     def cleanup(args):
-        subprocess.call(["ansible-playbook", "openstack/playbooks/clean.yaml", "-e", "prefix=%s" % args.prefix])
+        subprocess.check_call(["ansible-playbook", "openstack/playbooks/clean.yaml", "-e", "prefix=%s" % args.prefix])
 
     @staticmethod
     def purge(args):
-        subprocess.call(["ansible-playbook", "openstack/playbooks/purge.yaml", "-e", "prefix=%s" % args.prefix])
+        subprocess.check_call(["ansible-playbook", "openstack/playbooks/purge.yaml", "-e", "prefix=%s" % args.prefix])
 
     @staticmethod
     def deploy(args):
@@ -24,19 +24,19 @@ class DriverLibvirt:
     @staticmethod
     def cleanup(args):
         for i in ["esxi1", "esxi2", "vcenter"]:
-            subprocess.call(["vl", "stop", i])
+            subprocess.check_call(["vl", "stop", i])
 
     @staticmethod
     def purge(args):
-        subprocess.call(["vl", "down"])
+        subprocess.check_call(["vl", "down"])
 
     @staticmethod
     def deploy(args):
-        subprocess.call(["vl", "up", "--virt-lightning-yaml", "libvirt/virt-lightning.yaml"])
-        subprocess.call("vl ansible_inventory>inventory", shell=True)
-        subprocess.call(["ansible-playbook", "libvirt/playbooks/prepare_datastore.yaml", "-i", "inventory"])
+        subprocess.check_call(["vl", "up", "--virt-lightning-yaml", "libvirt/virt-lightning.yaml"])
+        subprocess.check_call("vl ansible_inventory>inventory", shell=True)
+        subprocess.check_call(["ansible-playbook", "libvirt/playbooks/prepare_datastore.yaml", "-i", "inventory"])
         if args.run_test:
-            subprocess.call(["ansible-playbook", "-vv", "playbooks/run_test.yaml", "-i", "inventory", "-e", "prefix=%s" % args.prefix])
+            subprocess.check_call(["ansible-playbook", "-vv", "playbooks/run_test.yaml", "-i", "inventory", "-e", "prefix=%s" % args.prefix])
 
 
 parser = argparse.ArgumentParser(description='Process some integers.')
