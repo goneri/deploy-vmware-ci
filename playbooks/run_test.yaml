@@ -5,24 +5,23 @@
       vars:
         vmware_ci_configure_ansible_test_ansible_path: /home/goneri/git_repos/ansible_projects/c
     - import_role:
+        name: ansible-test-inventory
+      vars:
+        ansible_test_inventory_os: vmware_rest
+    - import_role:
+        name: ara
+        tasks_from: prepare_venv
+
+    - import_role:
         name: ansible-test
       vars:
-        ansible_test_location: /home/goneri/git_repos/ansible_projects/c
+        ansible_test_location: ~/.ansible/collections/ansible_collections/community/vmware/
         ansible_test_integration_targets: vmware_vswitch
         ansible_test_venv_path: /home/goneri/git_repos/ansible_projects/c/.virtualenv/py37/
-        #
-- hosts: "{{ prefix }}datastore"
-  vars:
-    ansible_user: centos
-  tasks:
-    - package:
-        name: tmux
-        state: present
-      become: true
-    - copy:
-        src: /home/goneri/git_repos/deploy-vmware-ci/run_test.sh
-        dest: run_test.sh
-    - shell: "tmux new-session -d -s run_test 'bash run_test.sh > output.log'"
-      args:
-        creates: output.log
+        ansible_test_enable_ara: true
+        ansible_test_collections: true
+        ansible_test_ansible_path: /home/goneri/git_repos/ansible_projects/c
 
+    - import_role:
+        name: ara
+        tasks_from: export
