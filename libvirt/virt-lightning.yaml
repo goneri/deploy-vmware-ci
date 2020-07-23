@@ -17,10 +17,8 @@
   groups: ['esxis']
   networks:
   - network: virt-lightning
-    nic_model: e1000
     ipv4: 192.168.123.6
   - network: default
-    nic_model: e1000
 - name: esxi2
   fqdn: esxi2.test
   distro: esxi-6.7.0-20190802001-STANDARD
@@ -28,10 +26,8 @@
   groups: ['esxis']
   networks:
   - network: virt-lightning
-    nic_model: e1000
     ipv4: 192.168.123.7
   - network: default
-    nic_model: e1000
 - name: vcenter
   fqdn: vcenter.test
   distro: VMware-VCSA-all-6.7.0-14836122
