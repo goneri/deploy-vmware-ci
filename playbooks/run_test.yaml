@@ -3,7 +3,8 @@
     - import_role:
         name: vmware-ci-configure-ansible-test
       vars:
-        vmware_ci_configure_ansible_test_ansible_path: /home/goneri/git_repos/ansible_projects/c
+        # The location of a copy of ansible-2.10
+        vmware_ci_configure_ansible_test_ansible_path: /home/goneri/git_repos/ansible_projects/ansible-2.10
     - import_role:
         name: ansible-test-inventory
       vars:
@@ -13,7 +14,11 @@
         name: ansible-test
       vars:
         ansible_test_location: ~/.ansible/collections/ansible_collections/community/vmware/
-        ansible_test_integration_targets: vmware_vswitch
-        ansible_test_venv_path: /home/goneri/git_repos/ansible_projects/c/.virtualenv/py37/
+        ansible_test_integration_targets: zuul/vmware/vcenter_2esxi/
+        ansible_test_venv_path: /home/goneri/tmp/vl
         ansible_test_collections: true
         ansible_test_ansible_path: /home/goneri/git_repos/ansible_projects/c
+        ansible_test_split_in: 4
+        ansible_test_enable_ara: false
+        ansible_test_collection_name: vmware
+        ansible_test_collection_namespace: community
