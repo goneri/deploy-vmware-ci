@@ -30,7 +30,9 @@
   - network: default
 - name: vcenter
   fqdn: vcenter.test
-  distro: VMware-VCSA-all-6.7.0-14836122
+  #distro: VMware-VCSA-all-6.7.0-14836122
+  distro: VMware-VCSA-all-7.0.0-16189094
+  root_disk_size: 55
   root_password: '!234AaAa56'
   networks:
   - network: virt-lightning
