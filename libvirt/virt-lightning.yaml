@@ -10,29 +10,22 @@
   networks:
   - network: virt-lightning
     ipv4: 192.168.123.4
+  - network: default
+    ipv4: 192.168.122.4
 - name: esxi1
   fqdn: esxi1.test
   distro: esxi-6.7.0-20190802001-STANDARD
+  #distro: esxi-7.0.0-15525992-STANDARD
   root_password: '!234AaAa56'
   groups: ['esxis']
   networks:
   - network: virt-lightning
     ipv4: 192.168.123.6
   - network: default
-- name: esxi2
-  fqdn: esxi2.test
-  distro: esxi-6.7.0-20190802001-STANDARD
-  root_password: '!234AaAa56'
-  groups: ['esxis']
-  networks:
-  - network: virt-lightning
-    ipv4: 192.168.123.7
-  - network: default
 - name: vcenter
   fqdn: vcenter.test
-  #distro: VMware-VCSA-all-6.7.0-14836122
-  distro: VMware-VCSA-all-7.0.0-16189094
-  root_disk_size: 55
+  distro: VMware-VCSA-all-7.0.1-16860138
+  root_disk_size: 40
   root_password: '!234AaAa56'
   networks:
   - network: virt-lightning
