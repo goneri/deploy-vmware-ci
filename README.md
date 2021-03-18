@@ -89,3 +89,12 @@ For here you can call `ansible-test` with:
     VMWARE_TEST_PLATFORM=static ansible-test integration --python 3.9 vmware_dvswitch
 
 Just replace `3.9`` with your actual verison of Python, and `vmware_dvswitch`` with the target to run.
+
+### Automate all these steps with `--run-test true`
+
+You can automate all these steps if you pass `--run-test true` to `./run.sh`.
+In this case, the `playbooks/run_test.yaml` playbook will be executed at the end of the deployment.
+You just need to adjust some variables in `playbooks/run_test.yaml` to match your local set-up.
+
+The nice part of this is that it reproduces the behaviour of the Zuul-CI. And so, simplify the
+testing/troubleshooting of Zuul's configuration.
