@@ -16,7 +16,7 @@ It can easier target a local Libvirt hypervisor, or an OpenStack tenant.
 - memory 20GB
 - vcpus: 2 for vcenter, 1 for ESXi, more will probably seriously increase the performance
 - Ansible 2.8+
-- Qcow2 Images:
+- Qcow2 Images. If you can get access to some existing images, it's better. The creation process is time consuming.
     - ESXi: https://github.com/virt-lightning/esxi-cloud-images
     - vcenter: https://github.com/goneri/vcsa_to_qcow2
 - A copy of the following repository in the ../ansible-zuul directory.
@@ -63,6 +63,15 @@ Prepare and load a virtualenv, install ansible and position yourself in ~/.ansib
 You should also install some extra dependencies with:
 
     pip install -r requirements.txt -r test-requirements.txt
+
+### Adjust the /etc/hosts
+
+Add the following entries in your `/etc/hosts`:
+
+    192.168.123.4 datastore.test datastore
+    192.168.123.6 esxi1.test esxi1
+    192.168.123.7 esxi2.test esxi2
+    192.168.123.8 vcenter.test vcenter
 
 ### write the configuration for ansible-test
 
