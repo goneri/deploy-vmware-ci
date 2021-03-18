@@ -38,10 +38,10 @@ It can easier target a local Libvirt hypervisor, or an OpenStack tenant.
 
 ## Installation
 
-    virtualenv -p python3.7 .virtualenv/py37
-    source .virtualenv/py37/bin/activate
+    python3 -menv my_venv
+    source my_venv/bin/activate
     pip install -r requirements.txt
-    ./run.py --driver openstack deploy
+    ./run.py --driver libvirt deploy
 
 ## Usage
 
