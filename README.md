@@ -107,3 +107,23 @@ You just need to adjust some variables in `playbooks/run_test.yaml` to match you
 
 The nice part of this is that it reproduces the behaviour of the Zuul-CI. And so, simplify the
 testing/troubleshooting of Zuul's configuration.
+
+## Configure govc
+
+`govc` (https://github.com/vmware/govmomi/blob/master/govc/USAGE.md) is a light CLI too that you can use to browse your vSphere.
+You can configure it with the following commands (Bash/zsh):
+
+    export GOVC_PASSWORD=$(crudini --get /tmp/inventory-vmware_rest 'vmware_rest:vars' 'vcenter_password')
+    export GOVC_HOST=vcenter.test
+    export GOVC_USERNAME=administrator@VSPHERE.LOCAL
+    export GOVC_URL=https://vcenter.test/sdk
+    export GOVC_INSECURE=1
+
+
+or with FishShell:
+
+    set -x GOVC_PASSWORD (crudini --get /tmp/inventory-vmware_rest 'vmware_rest:vars' 'vcenter_password')
+    set -x GOVC_HOST vcenter.test
+    set -x GOVC_USERNAME administrator@VSPHERE.LOCAL
+    set -x GOVC_URL https://vcenter.test/sdk
+    set -x GOVC_INSECURE 1
