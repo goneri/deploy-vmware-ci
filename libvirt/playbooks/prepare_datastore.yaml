@@ -5,6 +5,12 @@
             root: "{{ lookup('password', '/dev/null length=15 chars=ascii_letters,digits,hexdigits') }}56"
             zuul: "{{ lookup('password', '/dev/null length=15 chars=ascii_letters,digits,hexdigits') }}56"
 
+- hosts: vcenter
+  gather_facts: false
+  tasks:
+    - import_role:
+        name: vmware-ci-memory-configuration
+
 - hosts: all
   tasks:
     - import_role:
