@@ -19,7 +19,7 @@
         name: ansible-test
       vars:
         ansible_test_location: ~/.ansible/collections/ansible_collections/community/vmware/
-        ansible_test_integration_targets: zuul/vmware/vcenter_2esxi/
+        ansible_test_integration_targets: vmware_guest_disk
         ansible_test_provider_root_dir: "{{ ansible_src_dir }}"
         ansible_test_venv_path: "{{ ansible_venv_dir }}"
         ansible_test_collections: true
