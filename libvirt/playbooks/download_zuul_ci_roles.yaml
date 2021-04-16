@@ -21,3 +21,4 @@
       ignore_errors: yes
       with_items: "{{ git_repos }}"
       delegate_to: localhost
+   
