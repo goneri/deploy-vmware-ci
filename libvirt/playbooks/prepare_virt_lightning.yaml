@@ -1,0 +1,8 @@
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: create virt-lightning configuration
+      shell:
+        echo "{{ content }}" > "{{ playbook_dir ~ '/../virt-lightning.yaml' }}"
+      vars:
+        content: "{{ lookup('template', playbook_dir ~ '/../virt-lightning.j2')}}"
