@@ -8,7 +8,7 @@
         name: "ansible-zuul-jobs"
       - src: https://opendev.org/zuul/zuul-jobs.git
         name: "zuul-jobs"
-    ansible_zuul_dir: "../ansible-zuul"
+    ansible_zuul_dir: "ansible-zuul"
   tasks:
     - name: define directory to clone repository
       set_fact:
