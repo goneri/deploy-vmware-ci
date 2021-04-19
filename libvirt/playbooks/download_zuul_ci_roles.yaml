@@ -1,0 +1,24 @@
+- name: clone git repos
+  hosts: localhost
+  gather_facts: false
+  connection: local
+  vars:
+    git_repos:
+      - src: https://github.com/ansible/ansible-zuul-jobs.git
+        name: "ansible-zuul-jobs"
+      - src: https://opendev.org/zuul/zuul-jobs.git
+        name: "zuul-jobs"
+    ansible_zuul_dir: "ansible-zuul"
+  tasks:
+    - name: define directory to clone repository
+      set_fact:
+        clone_dir: "{{ lookup('env','PWD') ~ '/' ~ ansible_zuul_dir }}"
+    - name: download ansible zuul roles
+      git:
+        repo: "{{ item.src }}"
+        dest: "{{ clone_dir ~ '/' ~ item.name }}"
+        clone: yes
+      ignore_errors: yes
+      with_items: "{{ git_repos }}"
+      delegate_to: localhost
+   
