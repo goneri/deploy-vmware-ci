@@ -55,6 +55,7 @@ class DriverLibvirt:
             del os.environ['ANSIBLE_ROLES_PATH']
         # prepare datastore
         subprocess.check_call(["ansible-playbook", "libvirt/playbooks/prepare_datastore.yaml", "-i", "inventory", "-vv"])
+        subprocess.check_call(["ansible-playbook", "playbooks/write_inventory.yaml", "-i", "inventory", "-vv"])
         if args.run_test:
             subprocess.check_call(["ansible-playbook", "-vv", "playbooks/run_test.yaml", "-i", "inventory", "-e", "prefix=%s" % args.prefix])
 

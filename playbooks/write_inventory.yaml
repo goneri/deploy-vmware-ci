@@ -1,0 +1,9 @@
+---
+- hosts: localhost
+  tasks:
+    - import_role:
+        name: ansible-test-inventory
+      vars:
+        ansible_test_inventory_os: vmware_rest
+        vmware_ci_set_passwords_secret_dir: /tmp
+

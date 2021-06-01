@@ -11,11 +11,6 @@
         ansible_test_provider_root_dir: "{{ ansible_src_dir }}"
         ansible_test_provider_name: vcenter
     - import_role:
-        name: ansible-test-inventory
-      vars:
-        ansible_test_inventory_os: vmware_rest
-        vmware_ci_set_passwords_secret_dir: /tmp
-    - import_role:
         name: ansible-test
       vars:
         ansible_test_location: ~/.ansible/collections/ansible_collections/community/vmware/
