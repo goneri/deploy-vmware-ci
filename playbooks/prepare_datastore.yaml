@@ -49,4 +49,4 @@
     - import_role:
         name: vmware-ci-nfs-share
       vars:
-        vmware_ci_nfs_share_allow_ips: "{{ groups['esxis'] | map('extract', hostvars, ['ansible_host'])|list }}"
+        vmware_ci_nfs_share_allow_ips: "{{ groups['all'] | map('extract', hostvars, ['ansible_host'])|list }}"
