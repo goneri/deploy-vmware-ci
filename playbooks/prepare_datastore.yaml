@@ -13,9 +13,6 @@
         name: net.ipv4.tcp_timestamps
         value: 1
         state: present
-    - name: Update the VCSA
-      command: tdnf update -y
-      become: true
     - import_role:
         name: vmware-ci-memory-configuration
 
