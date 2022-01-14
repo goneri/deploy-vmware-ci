@@ -1,6 +1,6 @@
 - name: datastore
   fqdn: datastore.test
-  distro: "{{ datastore_distro | default('centos-7') }}"
+  distro: "{{ datastore_distro | default('fedora-35') }}"
   memory: 1024
   vcpus: 1
   username: centos
@@ -14,7 +14,7 @@
     ipv4: 192.168.122.4
 - name: esxi1
   fqdn: esxi1.test
-  distro: "{{ esxi_distro | default('esxi-7.0.2-17630552-STANDARD') }}"
+  distro: "{{ esxi_distro | default('esxi-7.0U3-18644231-STANDARD') }}"
   root_password: '!234AaAa56'
   groups: ['esxis']
   networks:
@@ -23,7 +23,7 @@
   - network: default
 - name: vcenter
   fqdn: vcenter.test
-  distro: "{{ vcenter_distro | default('VMware-VCSA-all-7.0.2-17694817') }}"
+  distro: "{{ vcenter_distro | default('VMware-VCSA-all-7.0.3-18778458') }}"
   vcpus: 4
   root_disk_size: 100
   root_password: '!234AaAa56'
