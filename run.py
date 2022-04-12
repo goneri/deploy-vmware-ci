@@ -144,7 +144,7 @@ parser.add_argument(
     dest="driver",
     type=str,
     choices=["libvirt", "openstack"],
-    default="openstack",
+    default="libvirt",
     help="Driver to use",
 )
 parser.add_argument("--prefix", type=str, default="")
