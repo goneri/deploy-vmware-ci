@@ -41,7 +41,6 @@ It can easier target a local Libvirt hypervisor, or an OpenStack tenant.
     python3 -menv my_venv
     source my_venv/bin/activate
     pip install -r requirements.txt
-    ./run.py --driver libvirt deploy
 
 ## Usage
 
@@ -50,9 +49,8 @@ Just use the `--help` argument:
     ./run.py --help
 
 For instance, to start a deployment:
-
-    ./run.py --driver openstack deploy
-
+    
+    ./run.py deploy
 
 ## How to run the community.vmware test-suite
 
