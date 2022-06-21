@@ -21,6 +21,8 @@
   - network: virt-lightning
     ipv4: 192.168.123.6
   - network: default
+  meta_data_media_type: cdrom
+  default_bus_type: sata
 - name: vcenter
   fqdn: vcenter.test
   distro: "{{ vcenter_distro | default('VMware-VCSA-all-7.0.3-18778458') }}"
