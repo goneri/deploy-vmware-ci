@@ -20,10 +20,11 @@ It can easier target a local Libvirt hypervisor.
     - ESXi: https://github.com/virt-lightning/esxi-cloud-images
     - vcenter: https://github.com/goneri/vcsa_to_qcow2
 - A copy of the following repository in the ../ansible-zuul directory.
-
+    ```shell
     mkdir ../ansible-zuul
     git clone https://github.com/ansible/ansible-zuul-jobs ../ansible-zuul/ansible-zuul-jobs
     git clone https://opendev.org/zuul/zuul-jobs.git ../ansible-zuul/zuul-jobs
+    ```
 
 ### Libvirt
 
