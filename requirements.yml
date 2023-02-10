@@ -1,0 +1,6 @@
+---
+collections:
+  - ansible.netcommon
+  - community.vmware
+  - openstack.cloud
+  - vmware.vmware_rest
