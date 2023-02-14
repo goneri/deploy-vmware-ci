@@ -7,6 +7,7 @@ openstack_environment_hosts:
     vcsa: "{{ openstack_environment_testlab_network_cidr| ipaddr('net') | ipaddr('8') }}"
     esxi1: "{{ openstack_environment_testlab_network_cidr| ipaddr('net') | ipaddr('6') }}"
     esxi2: "{{ openstack_environment_testlab_network_cidr| ipaddr('net') | ipaddr('7') }}"
-openstack_environment_esxi_vm_image: esxi-6.7.0-20190802001-STANDARD
-openstack_environment_datastore_vm_image: CentOS-7-x86_64-GenericCloud
-openstack_environment_vcsa_vm_image: VMware-VCSA-all-6.7.0-14836122
+openstack_environment_esxi_vm_image: esxi-7.0U3C-19193900-STANDARD
+openstack_environment_datastore_vm_image: CentOS 7.8 (x86_64) [2020-04-22]
+openstack_environment_vcsa_vm_image: VMware-VCSA-all-7.0.3-20395099-001
+key_file_path: /home/goneri/.ssh/id_rsa.pub

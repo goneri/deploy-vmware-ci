@@ -7,6 +7,8 @@
 
 - hosts: vcenter
   gather_facts: false
+  vars:
+      ansible_user: root
   tasks:
     - name: Enable TCP timestamp
       sysctl:
@@ -16,7 +18,41 @@
     - import_role:
         name: vmware-ci-memory-configuration
 
-- hosts: all
+- hosts: vcenter
+  vars:
+      ansible_user: root
+  tasks:
+    - import_role:
+        name: vmware-ci-write-etc-hosts
+      vars:
+        vmware_ci_write_etc_hosts_mapping:
+          vcenter: '{{ hostvars.vcenter.ansible_host }}'
+          esxi1: '{{ "esxi1" in hostvars and hostvars.esxi1.ansible_host }}'
+          esxi2: '{{ "esxi2" in hostvars and hostvars.esxi2.ansible_host }}'
+          esxi3: '{{ "esxi3" in hostvars and hostvars.esxi3.ansible_host }}'
+          datastore: '{{ hostvars.datastore.ansible_host }}'
+    - import_role:
+        name: vmware-ci-set-passwords
+
+- hosts: esxi1, esxi2
+  vars:
+      ansible_user: zuul
+  tasks:
+    - import_role:
+        name: vmware-ci-write-etc-hosts
+      vars:
+        vmware_ci_write_etc_hosts_mapping:
+          vcenter: '{{ hostvars.vcenter.ansible_host }}'
+          esxi1: '{{ "esxi1" in hostvars and hostvars.esxi1.ansible_host }}'
+          esxi2: '{{ "esxi2" in hostvars and hostvars.esxi2.ansible_host }}'
+          esxi3: '{{ "esxi3" in hostvars and hostvars.esxi3.ansible_host }}'
+          datastore: '{{ hostvars.datastore.ansible_host }}'
+    - import_role:
+        name: vmware-ci-set-passwords
+
+- hosts: datastore
+  vars:
+      ansible_user: centos
   tasks:
     - import_role:
         name: vmware-ci-write-etc-hosts
@@ -32,6 +68,8 @@
 
 - hosts: vcenter
   gather_facts: false
+  vars:
+      ansible_user: root
   tasks:
     - import_role:
         name: configure-swap

@@ -1,7 +1,6 @@
 - hosts: localhost
   roles:
     - name: openstack-environment
-
 - hosts: "{{ prefix }}datastore"
   gather_facts: no
   vars:
@@ -37,10 +36,10 @@
           127.0.0.1 localhost
           ::1  localhost ipv6-localhost ipv6-loopback
           {% for host in ['datastore', 'esxi1', 'esxi2', 'vcenter'] %}
-          {{ hostvars[prefix + host]['openstack']['addresses']['lab1testlab'][0]['addr']}} {{ host }}.test {{ host }}
+          {{ hostvars[prefix + host]['openstack']['addresses']['testlab'][0]['addr']}} {{ host }}.test {{ host }}
           {% endfor %}
         dest: /etc/hosts
-      become: true
+      # become: true
       register: hosts_status
     - name: Unconditionally reboot the machine with all defaults
       reboot:
@@ -59,14 +58,13 @@
 
 - hosts: localhost
   tasks:
-    - debug: var=hostvars.lab1datastore.ansible_host
+    - debug: var=hostvars.datastore.ansible_host
 
 - hosts: "{{ prefix }}esxi1,{{ prefix }}esxi2"
   gather_facts: no
   vars:
-    ansible_ssh_common_args: "-o stricthostkeychecking=no -o userknownhostsfile=/dev/null -o ProxyCommand=\"ssh -W {{ hostvars[inventory_hostname]['openstack']['addresses']['lab1testlab'][0]['addr'] }}:22 -q centos@{{ hostvars.lab1datastore.ansible_host }}\""
-    ansible_user: root
-    ansible_python_interpreter: /bin/python
+    ansible_ssh_common_args: "-o stricthostkeychecking=no -o userknownhostsfile=/dev/null -o ProxyCommand=\"ssh -W {{ hostvars[inventory_hostname]['openstack']['addresses']['testlab'][0]['addr'] }}:22 -q centos@{{ hostvars.datastore.ansible_host }}\""
+    ansible_user: zuul
   tasks:
     - name: Write the /etc/hosts file
       copy:
@@ -74,10 +72,9 @@
           127.0.0.1       localhost.localdomain localhost
           ::1             localhost.localdomain localhost
           {% for host in ['datastore', 'esxi1', 'esxi2', 'vcenter'] %}
-          {{ hostvars[prefix + host]['openstack']['addresses']['lab1testlab'][0]['addr']}} {{ host }}.test {{ host }}
+          {{ hostvars[prefix + host]['openstack']['addresses']['testlab'][0]['addr']}} {{ host }}.test {{ host }}
           {% endfor %}
         dest: /etc/hosts
-      become: true
+      # become: true
     - debug: var=inventory_hostname
     - command: "esxcli system hostname set --fqdn={{ inventory_hostname| regex_replace('^'+prefix,'') }}.test"
-
