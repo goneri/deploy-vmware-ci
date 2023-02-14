@@ -1,3 +1,4 @@
-plugin: openstack
-expand_hostvars: yes
-fail_on_errors: yes
+---
+plugin: openstack.cloud.openstack
+expand_hostvars: true
+fail_on_errors: true

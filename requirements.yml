@@ -1,0 +1,8 @@
+---
+ collections:
+   - vmware.vmware_rest
+   - community.vmware
+   - openstack.cloud
+   - ansible.netcommon
+   - ansible.posix
+   - community.general

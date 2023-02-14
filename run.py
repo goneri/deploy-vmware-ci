@@ -33,11 +33,30 @@ class DriverOpenStack:
         subprocess.check_call(
             [
                 "ansible-playbook",
+                "-vv",
                 "openstack/playbooks/deploy.yaml",
                 "-i",
                 "openstack/inventory/openstack.yaml",
                 "-e",
                 "prefix=%s" % args.prefix,
+            ]
+        )
+        subprocess.check_call(
+            [
+                "ansible-playbook",
+                "playbooks/prepare_datastore.yaml",
+                "-i",
+                "openstack/inventory/openstack.yaml",
+                "-vv",
+            ]
+        )
+        subprocess.check_call(
+            [
+                "ansible-playbook",
+                "playbooks/write_inventory.yaml",
+                "-i",
+                "openstack/inventory/openstack.yaml",
+                "-vv",
             ]
         )
         if args.run_test:

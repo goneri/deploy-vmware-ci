@@ -1,7 +1,7 @@
 - os_keypair:
     state: present
     name: local_ssh_key
-    public_key_file: /home/goneri/.ssh/id_rsa.pub
+    public_key_file: "{{ key_file_path }}"
 - os_network:
     state: present
     name: "{{ prefix }}testlab"
@@ -33,7 +33,7 @@
 - os_router:
     state: present
     name: "{{ prefix }}router_lab"
-    network: '{{ (networks.openstack_networks|selectattr("router:external")|first)["id"] }}'
+    network: '{{ (networks.networks|selectattr("is_router_external")|first)["id"] }}'
     interfaces:
       - "{{ prefix }}testlabsubnet"
 - os_security_group:
@@ -62,7 +62,7 @@
     image: '{{ openstack_environment_datastore_vm_image }}'
     boot_from_volume: True
     terminate_volume: yes
-    flavor: m1.small
+    flavor: v3-starter-2
     nics:
       - net-id: "{{ testlab_info.id }}"
     key_name: local_ssh_key
@@ -70,6 +70,7 @@
     security_groups:
       - default
       - ssh
+    volume_size: 40
   register: datastore_info
 - debug: var=datastore_info
 
@@ -80,11 +81,11 @@
     image: '{{ openstack_environment_vcsa_vm_image }}'
     boot_from_volume: true
     terminate_volume: yes
-    flavor_ram: 9000
+    flavor_ram: 16000
     key_name: local_ssh_key
     config_drive: true
-    #    auto_ip: false
     timeout: 600
+    volume_size: 70
     nics:
       - net-name: "{{ prefix }}testlab"
     security_groups:
@@ -113,12 +114,16 @@
     flavor_ram: "{{ item.flavor_ram }}"
     key_name: local_ssh_key
     config_drive: true
-    auto_ip: false
     timeout: 600
+    volume_size: 70
+    security_groups:
+      - default
+      - ssh
+      - https
     nics:
       - net-name: "{{ prefix }}testlab"
-      #- port-name: "{{ prefix }}{{ item.port }}"
-      - net-name: "{{ prefix }}testlabdummy"
+      # - port-name: "{{ prefix }}{{ item.port }}"
+      # - net-name: "{{ prefix }}testlabdummy"
     userdata: |
       #cloud-config
       hostname: "{{ item.name }}"

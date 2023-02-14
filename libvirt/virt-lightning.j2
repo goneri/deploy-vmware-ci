@@ -14,7 +14,7 @@
     ipv4: 192.168.122.4
 - name: esxi1
   fqdn: esxi1.test
-  distro: "{{ esxi_distro | default('esxi-7.0U3-18644231-STANDARD') }}"
+  distro: "{{ esxi_distro | default('esxi-7.0U3C-19193900-STANDARD') }}"
   root_password: '!234AaAa56'
   groups: ['esxis']
   networks:
@@ -25,7 +25,7 @@
   default_bus_type: sata
 - name: vcenter
   fqdn: vcenter.test
-  distro: "{{ vcenter_distro | default('VMware-VCSA-all-7.0.3-19717403') }}"
+  distro: "{{ vcenter_distro | default('VMware-VCSA-all-7.0.3-20395099-001') }}"
   vcpus: 4
   root_disk_size: 100
   root_password: '!234AaAa56'
