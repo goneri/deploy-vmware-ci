@@ -162,7 +162,7 @@ parser.add_argument(
     "--driver",
     dest="driver",
     type=str,
-    choices=["libvirt"],  # the OpenStack support is currently broken
+    choices=["libvirt", "openstack"],
     default="libvirt",
     help="Driver to use",
 )
