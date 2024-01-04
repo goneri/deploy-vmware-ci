@@ -8,7 +8,7 @@ This playbook will deploy:
 - two ESXi
 - a datastore VM (with a NFS)
 
-It can easier target a local Libvirt hypervisor.
+It can easier target a local Libvirt hypervisor, or an OpenStack tenant.
 
 ## Requirements
 

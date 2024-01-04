@@ -1,13 +1,15 @@
-- os_keypair:
+- openstack.cloud.keypair:
     state: present
     name: local_ssh_key
     public_key_file: "{{ key_file_path }}"
-- os_network:
+
+- openstack.cloud.network:
     state: present
     name: "{{ prefix }}testlab"
     port_security_enabled: true
   register: testlab_info
-- os_subnet:
+
+- openstack.cloud.subnet:
     state: present
     network_name: "{{ prefix }}testlab"
     name: "{{ prefix }}testlabsubnet"
@@ -15,48 +17,58 @@
     enable_dhcp: true
     gateway_ip: "{{ openstack_environment_hosts.gateway|ipaddr('address') }}"
     dns_nameservers:
-#        #      - "{{ openstack_environment_hosts.dns|ipaddr('address') }}"
+      # - "{{ openstack_environment_hosts.dns|ipaddr('address') }}"
       - 8.8.8.8
-- os_network:
+
+- openstack.cloud.network:
     state: present
     name: "{{ prefix }}testlabdummy"
     port_security_enabled: true
-- os_subnet:
+
+- openstack.cloud.subnet:
     state: present
     network_name: "{{ prefix }}testlabdummy"
     name: "{{ prefix }}testlabdummysubnet"
     cidr: 192.168.10.0/24
     enable_dhcp: true
-- os_networks_info:
+
+- openstack.cloud.networks_info:
     interface: public
   register: networks
-- os_router:
+
+- openstack.cloud.router:
     state: present
     name: "{{ prefix }}router_lab"
     network: '{{ (networks.networks|selectattr("is_router_external")|first)["id"] }}'
     interfaces:
       - "{{ prefix }}testlabsubnet"
-- os_security_group:
+
+- openstack.cloud.security_group:
     name: ssh
     state: present
-- os_security_group_rule:
+
+- openstack.cloud.security_group_rule:
     security_group: ssh
     protocol: tcp
     port_range_min: 22
     port_range_max: 22
     remote_ip_prefix: 0.0.0.0/0
-- os_security_group:
+
+- openstack.cloud.security_group:
     name: https
     state: present
-- os_security_group_rule:
+
+- openstack.cloud.security_group_rule:
     security_group: https
     protocol: tcp
     port_range_min: 443
     port_range_max: 443
     remote_ip_prefix: 0.0.0.0/0
+
 - debug: var=testlab_info
+
 - name: launch the datastore node
-  os_server:
+  openstack.cloud.server:
     name: "{{ prefix }}datastore"
     state: present
     image: '{{ openstack_environment_datastore_vm_image }}'
@@ -72,10 +84,11 @@
       - ssh
     volume_size: 40
   register: datastore_info
+
 - debug: var=datastore_info
 
 - name: launch the vcenter instance
-  os_server:
+  openstack.cloud.server:
     name: "{{ prefix }}vcenter"
     state: present
     image: '{{ openstack_environment_vcsa_vm_image }}'
@@ -102,10 +115,8 @@
 #      disable_root: false
 #      password: '!234AaAa56'
 
-
-
 - name: launch the ESXi instances
-  os_server:
+  openstack.cloud.server:
     name: "{{ prefix }}{{ item.name }}"
     state: present
     image: "{{ item.image }}"
@@ -146,4 +157,3 @@
 
 - name: refresh inventory
   meta: refresh_inventory
-
